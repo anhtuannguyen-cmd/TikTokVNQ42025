@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng Quan Ưu Đãi TikTok Q4 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: TikTok Dark Theme (Dark Gray, Cyan, Fuchsia) -->
+    <!-- Application Structure Plan: Ứng dụng được thiết kế theo cấu trúc dashboard với các tab điều hướng rõ ràng cho từng nhóm chương trình chính (Khách hàng mới, Thương hiệu, TikTok Shop, Performance) và thêm trang Liên Hệ. Cấu trúc này giúp người dùng nhanh chóng tìm thấy thông tin. Điểm nhấn tương tác là công cụ tính toán tín dụng cho chương trình "Khách hàng mới". -->
+    <!-- Visualization & Content Choices: 1. Chương trình Khách hàng mới (Net New) -> Mục tiêu: Thông báo & Tính toán -> Trình bày: Biểu đồ cột tương tác (Chart.js) và Công cụ tính toán (JS) -> Tương tác: Người dùng nhập chi tiêu. 2. Các chương trình khác -> Trình bày: Thẻ thông tin. 3. Trang Liên Hệ: Thẻ thông tin cố định. Tất cả đều sử dụng Canvas cho biểu đồ, không dùng SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Deep Dark Blue/Gray */
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            /* Thêm padding/margin để nút nổi bật hơn */
+            margin: 0 4px;
+        }
+        .nav-link.active {
+            border-bottom-color: #22d3ee; /* Cyan-400 */
+            color: #22d3ee;
+            font-weight: 600;
+        }
+        /* Custom styling cho nút LIÊN HỆ */
+        .contact-btn {
+            background-color: #ec4899; /* Fuchsia-500 */
+            color: #ffffff;
+            font-weight: 700;
+            border-bottom: none !important; 
+            border: 2px solid #ec4899;
+            transition: all 0.3s ease;
+        }
+        .contact-btn:hover {
+            background-color: #06b6d4; /* Cyan-600 */
+            border-color: #06b6d4;
+            color: #ffffff;
+        }
+        .contact-btn.active {
+            background-color: #06b6d4; /* Cyan-600 khi active */
+            border-color: #06b6d4;
+        }
+
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Custom TikTok Logo Font */
+        .tiktok-logo-font {
+            font-family: 'Inter', sans-serif; /* Fallback to Inter */
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+        /* Custom Table Style */
+        .incentive-table th, .incentive-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #374151; /* gray-700 */
+        }
+        .incentive-table th {
+            color: #22d3ee; /* cyan-400 */
+            font-weight: 600;
+        }
+        /* Style for Callout Tags */
+        .callout-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+        .tag-hitlist {
+            background-color: #be185d; /* Pink 700 */
+            color: #fce7f3; /* Pink 100 */
+        }
+        .tag-optin {
+            background-color: #0e7490; /* Cyan 700 */
+            color: #f0f9ff; /* Cyan 50 */
+        }
+        /* Duo-Tone Border Effect */
+        .duo-box {
+            border: 1px solid #22d3ee; /* Cyan for main border */
+            box-shadow: 0 0 0 2px #ec4899; /* Fuchsia for the offset shadow/border */
+        }
+    </style>
+</head>
+<body class="text-gray-100 bg-gray-900">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <div class="flex justify-center items-center mb-2">
+                <!-- TikTok Logo (Chỉ chữ) -->
+                <span class="text-white text-3xl font-bold tiktok-logo-font mr-2">TikTok</span>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Tổng Hợp Chương Trình Ưu Đãi Doanh Nghiệp</h1>
+            <p class="text-lg text-gray-400 mt-2">Quý 4/2025 (01/10/2025 - 31/12/2025) - **Áp dụng cho khách hàng Việt Nam**</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center border-b border-gray-700 mb-8">
+            <button data-target="overview" class="nav-link active py-4 px-4 sm:px-6 text-sm sm:text-base font-medium text-gray-400 hover:text-cyan-400">Tổng Quan</button>
+            <button data-target="new-clients" class="nav-link py-4 px-4 sm:px-6 text-sm sm:text-base font-medium text-gray-400 hover:text-cyan-400">Khách Hàng Mới</button>
+            <button data-target="branding-ads" class="nav-link py-4 px-4 sm:px-6 text-sm sm:text-base font-medium text-gray-400 hover:text-cyan-400">Quảng Cáo Thương Hiệu</button>
+            <button data-target="tts-ads" class="nav-link py-4 px-4 sm:px-6 text-sm sm:text-base font-medium text-gray-400 hover:text-cyan-400">TikTok Shop Ads</button>
+            <button data-target="performance-ads" class="nav-link py-4 px-4 sm:px-6 text-sm sm:text-base font-medium text-gray-400 hover:text-cyan-400">Performance & Smart+</button>
+            
+            <!-- Nút LIÊN HỆ được nhấn mạnh -->
+            <button data-target="contact" class="contact-btn rounded-full py-2 px-4 sm:px-6 text-sm sm:text-base font-medium mt-2 mb-2 ml-2">
+                Liên Hệ Hỗ Trợ
+            </button>
+        </nav>
+
+        <main>
+            <section id="overview" class="content-section active">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center">
+                        <span class="text-fuchsia-400 mr-3 text-2xl">✨</span>
+                        Chào mừng đến với chương trình ưu đãi Q4/2025!
+                    </h2>
+                    <p class="mb-4 text-gray-300">Đây là trang tổng quan các chương trình khuyến khích dành cho khách hàng doanh nghiệp của TikTok tại thị trường Việt Nam (VN). Các thông tin được lọc và tổng hợp từ tài liệu mới nhất để đảm bảo tính chính xác và áp dụng đúng cho khu vực của bạn. Hãy sử dụng các tab điều hướng để khám phá chi tiết từng chương trình.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-gray-700 duo-box p-6 rounded-lg">
+                            <h3 class="font-bold text-lg text-cyan-400 flex items-center">
+                                <span class="mr-2 text-xl">🚀</span> Dành cho Khách hàng mới
+                            </h3>
+                            <p class="mt-2 text-gray-300">Nhận tín dụng quảng cáo lên đến <span class="font-bold">60%</span> trên chi tiêu trong 30 ngày đầu tiên, tối đa <span class="font-bold">$50,000</span>. Một khởi đầu mạnh mẽ cho các thương hiệu lần đầu tiên đến với TikTok.</p>
+                        </div>
+                        <div class="bg-gray-700 duo-box p-6 rounded-lg">
+                            <h3 class="font-bold text-lg text-fuchsia-400 flex items-center">
+                                <span class="mr-2 text-xl">📈</span> Tăng trưởng Thương hiệu (VN)
+                            </h3>
+                            <p class="mt-2 text-gray-300">Thúc đẩy chi tiêu quảng cáo thương hiệu (Branding Ads) so với quý trước để nhận tín dụng lên đến <span class="font-bold">20%</span>, áp dụng theo các bậc tăng trưởng $35\%$ $\rightarrow 50\%$.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="new-clients" class="content-section">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4">Chương trình cho Khách hàng mới</h2>
+                    <p class="mb-6 text-gray-300">Các ưu đãi này được thiết kế để chào đón và hỗ trợ các doanh nghiệp mới tham gia hoặc tăng cường sự hiện diện trên TikTok. Khám phá các cơ hội nhận tín dụng quảng cáo đáng kể khi bạn bắt đầu hành trình quảng cáo hoặc chuyển đổi từ phân khúc SMB.</p>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-cyan-400">1. Net New - Khách hàng/Thương hiệu hoàn toàn mới</h3>
+                            <p class="mt-2 mb-4 text-gray-300">Nhận tín dụng quảng cáo lên đến 60% trên tổng chi tiêu trong 30 ngày đầu tiên. Đây là cơ hội tuyệt vời để tối đa hóa ngân sách ban đầu của bạn.</p>
+                            
+                            <div class="bg-gray-700 duo-box p-6 rounded-lg">
+                                <h4 class="font-semibold mb-4 text-gray-200 flex items-center">
+                                    <span class="text-fuchsia-400 mr-2 text-lg">💰</span> Công cụ tính tín dụng ước tính
+                                </h4>
+                                <div class="grid sm:grid-cols-3 gap-4 items-end">
+                                    <div>
+                                        <label for="totalSpend" class="block text-sm font-medium text-gray-400">Tổng chi tiêu 30 ngày đầu ($)</label>
+                                        <input type="number" id="totalSpend" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm" placeholder="e.g., 20000">
+                                    </div>
+                                    <div>
+                                        <label for="liveSpend" class="block text-sm font-medium text-gray-400">Trong đó, chi tiêu Live GMV Max ($)</label>
+                                        <input type="number" id="liveSpend" class="mt-1 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm" placeholder="e.g., 2000">
+                                    </div>
+                                    <button id="calculateCreditBtn" class="w-full sm:w-auto bg-fuchsia-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-fuchsia-700 transition flex items-center justify-center">
+                                        <span class="mr-1">Tính toán</span>
+                                        <span class="text-sm">🧮</span>
+                                    </button>
+                                </div>
+                                <div id="creditResult" class="mt-4 text-lg font-bold text-fuchsia-400"></div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div class="chart-container">
+                                    <canvas id="netNewChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-700 pt-8">
+                             <h3 class="text-xl font-semibold text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🎓</span> 2. SMB Graduates - Khách hàng chuyển từ SMB <span class="callout-tag tag-hitlist">Hitlist-based</span>
+                             </h3>
+                             <p class="mt-2 text-gray-300">Dành cho các khách hàng chuyển từ SMB lên ENT trong quý này. Nhận tín dụng dựa trên mức tăng trưởng chi tiêu so với Q3/2025.</p>
+                             <ul class="list-disc list-inside mt-4 space-y-2 bg-gray-700 p-4 rounded-md text-gray-300">
+                                 <li>Tăng trưởng <span class="font-semibold">35% trở lên</span>: Nhận <span class="font-semibold">10%</span> tín dụng.</li>
+                                 <li>Tăng trưởng <span class="font-semibold">40% trở lên</span>: Nhận <span class="font-semibold">15%</span> tín dụng.</li>
+                                 <li>Tăng trưởng <span class="font-semibold">50% trở lên</span>: Nhận <span class="font-semibold">20%</span> tín dụng.</li>
+                                 <li class="font-bold text-white">Mức ưu đãi tối đa: $50,000 / khách hàng.</li>
+                             </ul>
+                        </div>
+                        
+                        <div class="border-t border-gray-700 pt-8">
+                             <h3 class="text-xl font-semibold text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">📱</span> 3. New App Ads - Quảng cáo ứng dụng mới
+                             </h3>
+                             <p class="mt-2 text-gray-300">Dành cho các ứng dụng chưa chi tiêu quảng cáo trong Q1-Q3/2025.</p>
+                             <div class="mt-4 bg-gray-700 duo-box p-4 rounded-md">
+                                <p class="text-lg font-bold text-cyan-400">Ưu đãi: 100% doanh thu ứng dụng trong Q4.</p>
+                                <p class="font-semibold text-white">Mức ưu đãi tối đa: $5,000 / App ID.</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="branding-ads" class="content-section">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4">Chương trình cho Quảng cáo Thương hiệu</h2>
+                    <p class="mb-6 text-gray-300">Thúc đẩy nhận diện và cân nhắc thương hiệu với các chương trình ưu đãi đặc biệt cho Topview, Consideration Ads và tăng trưởng chi tiêu branding nói chung. Đây là cơ hội để gia tăng tầm ảnh hưởng của thương hiệu bạn trên TikTok.</p>
+                    
+                    <div class="space-y-8">
+                        
+                        <!-- 1. Consideration Ads (C-ads) -->
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-xl text-cyan-400 flex items-center mb-4">
+                                <span class="text-fuchsia-400 mr-2 text-lg">💡</span> 1. Consideration Ads (C-ads) <span class="callout-tag tag-optin">Opt-in Required</span>
+                            </h3>
+                            <p class="mt-2 text-gray-300">Nhận tín dụng trên chi tiêu C-ads **tăng thêm** (Q4 so với Q3), tối đa **35%**. *Yêu cầu phải kích hoạt phiên bản TTMS tiêu chuẩn/lite.*</p>
+                            
+                            <h4 class="text-md font-semibold text-fuchsia-400 mt-4 mb-2">Mức Tín Dụng theo Chi tiêu tăng thêm (R)</h4>
+                            <div class="overflow-x-auto">
+                                <table class="incentive-table min-w-full text-sm text-gray-300 bg-gray-800 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-700">
+                                            <th class="text-cyan-400 font-bold">Mức Tăng Trưởng Chi tiêu</th>
+                                            <th class="text-cyan-400 font-bold">Tỷ lệ Tín dụng</th>
+                                            <th class="text-cyan-400 font-bold">Giới hạn Ưu đãi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Từ $6K USD trở lên</td>
+                                            <td>15%</td>
+                                            <td rowspan="5" class="text-center font-bold text-fuchsia-400">$40,000 USD / ID TTMS</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Từ $20K USD trở lên</td>
+                                            <td>20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Từ $40K USD trở lên</td>
+                                            <td>25%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Từ $60K USD trở lên</td>
+                                            <td>30%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Từ $80K USD trở lên</td>
+                                            <td>**35%**</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 2. Topview Program -->
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-xl text-cyan-400 flex items-center mb-4">
+                                <span class="text-fuchsia-400 mr-2 text-lg">👁️</span> 2. Topview Program
+                            </h3>
+                            <p class="mt-2 text-gray-300">Chương trình khuyến khích cho Quảng cáo Topview (quảng cáo đầu tiên khi mở app), có hiệu lực từ **16/09 - 31/12/2025**.</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <h4 class="text-md font-semibold text-fuchsia-400 mb-2">Khách hàng mới (New Buyers)</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-300 ml-4">
+                                        <li>Giảm mức chi tiêu tối thiểu.</li>
+                                        <li>Nhận **20% tín dụng** quảng cáo.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-md font-semibold text-fuchsia-400 mb-2">Khách hàng cũ (Existing Buyers)</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-300 ml-4">
+                                        <li>Mua 1 lần: Giảm **10%** hoặc tặng thêm lượt hiển thị.</li>
+                                        <li>Mua 2 lần: Giảm **15%** hoặc tặng thêm lượt hiển thị.</li>
+                                        <li>Mua 3 lần: Giảm **20%** hoặc tặng thêm lượt hiển thị. *(*Áp dụng trong cùng 1 tháng)*</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 3. QoQ Branding Growth -->
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-xl text-cyan-400 flex items-center mb-4">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🏆</span> 3. Tăng trưởng Branding QoQ (VN) <span class="callout-tag tag-optin">Opt-in Required</span>
+                            </h3>
+                            <p class="mt-2 text-gray-300">Nhận tín dụng trên tổng chi tiêu Branding Ads Q4 (Topview, Video View, C-ads...) khi đạt mức tăng trưởng so với Q3.</p>
+                            
+                            <h4 class="text-md font-semibold text-fuchsia-400 mt-4 mb-2">Mức Ưu Đãi Tăng Trưởng ($50K Max)</h4>
+                            <div class="overflow-x-auto">
+                                <table class="incentive-table min-w-full text-sm text-gray-300 bg-gray-800 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-700">
+                                            <th class="text-cyan-400 font-bold">Mức Tăng Trưởng</th>
+                                            <th class="text-cyan-400 font-bold">Tỷ lệ Tín dụng trên Q4</th>
+                                            <th class="text-cyan-400 font-bold">Lưu ý</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>35% trở lên</td>
+                                            <td>5%</td>
+                                            <td rowspan="4" class="text-xs text-fuchsia-400 font-bold">
+                                                GIỚI HẠN: $50,000 USD / khách hàng.<br>
+                                                BONUS KICKER: Thêm **2%** nếu đạt mục tiêu Premium Reach Spends.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>40% trở lên</td>
+                                            <td>10%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>45% trở lên</td>
+                                            <td>15%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>50% trở lên</td>
+                                            <td>**20%**</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-2">Áp dụng mức chi tiêu cơ sở $5,000 USD$ nếu chi tiêu Q3 $<\$5,000$.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tts-ads" class="content-section">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4">Chương trình TikTok Shop Ads (GMV Max)</h2>
+                    <p class="mb-6 text-gray-300">Tối ưu hóa doanh thu từ TikTok Shop với hai ưu đãi trọng điểm: Live Incentive (MoM Growth) và Black Friday TTS (12 Nov – 1 Dec).</p>
+                    <p class="mb-6 text-fuchsia-400 font-semibold">(Các chương trình này chỉ áp dụng cho danh sách khách hàng được chọn — Hitlist-based.)</p>
+                     
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-lg text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🔴</span> 1. Live Incentive (MoM Growth)
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-300">Khuyến khích tăng trưởng doanh thu từ TikTok Shop Live Ads theo từng tháng (MoM). Nếu đạt mục tiêu tăng trưởng, khách hàng nhận **20% ad credit** trên phần doanh thu tăng thêm.</p>
+                            
+                            <h4 class="text-sm font-semibold text-fuchsia-400 mt-4 mb-2">Yêu cầu KPI theo tháng:</h4>
+                            <div class="overflow-x-auto">
+                                <table class="incentive-table w-full text-sm text-gray-300 bg-gray-800 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-700">
+                                            <th class="text-cyan-400 font-bold">Ads Take Rate (TR)</th>
+                                            <th class="text-cyan-400 font-bold">Tháng 10</th>
+                                            <th class="text-cyan-400 font-bold">Tháng 11</th>
+                                            <th class="text-cyan-400 font-bold">Tháng 12</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>TR > 15%</td>
+                                            <td>15%</td>
+                                            <td>13%</td>
+                                            <td>8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>TR $\le$ 15%</td>
+                                            <td>16%</td>
+                                            <td>14%</td>
+                                            <td>9%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <h4 class="text-sm font-semibold text-fuchsia-400 mt-4 mb-1">Điều kiện nhận thưởng:</h4>
+                            <ul class="list-disc list-inside text-sm text-gray-300 ml-4 space-y-1">
+                                <li>Cần tăng trưởng liên tục trong cả 3 tháng.</li>
+                                <li>Nếu đạt thêm KPI $\ge$ **$10K** incremental spend mỗi tháng, có thể nhận đến **$10,500/** quý.</li>
+                                <li>Áp dụng cho khách hàng có doanh thu Live + Video đều đạt target.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-lg text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🛒</span> 2. Black Friday TTS (12 Nov – 1 Dec)
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-300">Chương trình đặc biệt cho giai đoạn Black Friday, áp dụng cho TikTok Shop Ads (TTS). Cần đạt Multiplier Target ($2.5X-3.2X$) và chi tiêu trung bình $\ge \$50/$ngày để đủ điều kiện.</p>
+                            
+                            <h4 class="text-sm font-semibold text-fuchsia-400 mt-4 mb-2">Chi tiết theo giai đoạn:</h4>
+                            <div class="overflow-x-auto">
+                                <table class="incentive-table min-w-full text-sm text-gray-300 bg-gray-800 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-700">
+                                            <th class="text-cyan-400 font-bold">Giai đoạn</th>
+                                            <th class="text-cyan-400 font-bold">Thời gian</th>
+                                            <th class="text-cyan-400 font-bold">Mục tiêu Multiplier</th>
+                                            <th class="text-cyan-400 font-bold">Mức hoàn tín dụng</th>
+                                            <th class="text-cyan-400 font-bold">Giới hạn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Opening Days</td>
+                                            <td>12–16 Nov</td>
+                                            <td>$\ge 2.8X$</td>
+                                            <td>20% rebate</td>
+                                            <td>$1,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Category Days</td>
+                                            <td>17–27 Nov</td>
+                                            <td>$\ge 2.5X$</td>
+                                            <td>20% rebate</td>
+                                            <td>$1,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Campaign Period</td>
+                                            <td>28 Nov–1 Dec</td>
+                                            <td>$\ge 3.2X$</td>
+                                            <td>20% rebate</td>
+                                            <td>$1,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <h4 class="text-sm font-semibold text-fuchsia-400 mt-4 mb-1">Lưu ý:</h4>
+                            <ul class="list-disc list-inside text-sm text-gray-300 ml-4 space-y-1">
+                                <li>Chỉ áp dụng cho **Hitlist clients**.</li>
+                                <li>Không cộng dồn với chương trình khác.</li>
+                                <li>Tính dựa trên incremental spend so với baseline đầu quý.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="performance-ads" class="content-section">
+                 <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4">Chương trình Performance & Smart+ Ads</h2>
+                    <p class="mb-6 text-gray-300">Tập trung vào các chiến dịch Performance Auction Enablement (PAE) và Smart+. Khách hàng chỉ được tham gia tối đa 1 lần mỗi 3 tháng trong năm 2025.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-lg text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🧪</span> PAE/Smart+ Accelerate <span class="callout-tag tag-optin">Opt-in Required</span>
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-300">Khuyến khích thử nghiệm chiến dịch Smart+ hoặc Performance Auction cho khách hàng chưa chạy hoặc chi tiêu < $500 trong 3 tháng gần nhất.</p>
+                            <div class="mt-4">
+                                <p class="text-2xl font-bold text-fuchsia-400">Tín dụng 1:1</p>
+                                <ul class="list-disc list-inside mt-2 text-gray-300">
+                                    <li>Chi tiêu tối thiểu: **$1,500 USD**</li>
+                                    <li>Giới hạn tín dụng: **$5,000 USD**</li>
+                                    <li>Thời lượng chiến dịch: **≥ 7 ngày**</li>
+                                    <li>Áp dụng tối đa **1 lần / quý**</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700 p-6 rounded-lg duo-box">
+                            <h3 class="font-semibold text-lg text-cyan-400 flex items-center">
+                                <span class="text-fuchsia-400 mr-2 text-lg">🧠</span> Smart+ Web/App Incentive <span class="callout-tag tag-optin">Opt-in Required</span>
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-300 font-semibold">Chương trình khuyến khích tăng trưởng chi tiêu cho Smart+ Web và Smart+ App trong Q4/2025.</p>
+                            
+                            <h4 class="text-md font-semibold text-cyan-400 mt-4">Điều kiện chung</h4>
+                            <ul class="list-disc list-inside mt-1 text-gray-300 ml-4 space-y-1">
+                                <li>Chi tiêu Smart+ phải tăng ít nhất **25%** so với Q3/2025.</li>
+                                <li>Mức thưởng cơ bản: **20%** ad credit trên tổng chi tiêu Smart+ đủ điều kiện.</li>
+                            </ul>
+                            
+                            <h4 class="text-md font-semibold text-cyan-400 mt-4">Smart+ Web</h4>
+                            <ul class="list-disc list-inside mt-1 text-gray-300 ml-4 space-y-1">
+                                <li>Yêu cầu: Smart+ Web Penetration $\ge$ **50%** tổng chi tiêu Web.</li>
+                                <li>Nếu có chạy Smart+ Catalog Ads, được cộng thưởng hệ số **1.1X** (tức là **22%** thay vì 20%).</li>
+                            </ul>
+
+                            <h4 class="text-md font-semibold text-cyan-400 mt-4">Smart+ App</h4>
+                            <ul class="list-disc list-inside mt-1 text-gray-300 ml-4 space-y-1">
+                                <li>Yêu cầu: Smart+ App Penetration $\ge$ **45%** tổng chi tiêu App.</li>
+                                <li>Nếu có chạy Smart+ tROAS Ads, được cộng thưởng hệ số **1.1X** (tức là **22%** thay vì 20%).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="content-section">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg shadow-black/50">
+                    <h2 class="text-2xl font-bold mb-4 text-cyan-400 flex items-center">
+                        <span class="text-fuchsia-400 mr-2 text-2xl">🤝</span> Liên Hệ Hỗ Trợ & Đối Tác
+                    </h2>
+                    <p class="mb-6 text-gray-300">Nếu bạn là khách hàng doanh nghiệp mới và muốn nhận hỗ trợ trực tiếp từ TikTok Partnership Manager để tối ưu hóa chiến lược quảng cáo Q4/2025, vui lòng liên hệ theo thông tin dưới đây. Chúng tôi sẵn sàng hỗ trợ bạn đạt được mục tiêu tăng trưởng.</p>
+                    
+                    <div class="max-w-md mx-auto bg-gray-700 duo-box p-6 rounded-lg shadow-xl">
+                        <h3 id="contact-name" class="text-xl font-bold text-white mb-4">Tuan Nguyen</h3>
+                        <p id="contact-title" class="text-fuchsia-400 mb-4 font-semibold">Partnership Manager, Global Business Solutions | SEA</p>
+                        
+                        <div class="space-y-3 text-gray-300">
+                            <div class="flex items-center">
+                                <span class="text-cyan-400 w-6 text-xl">📞</span>
+                                <a id="contact-mobile-link" href="tel:+84906809404" class="hover:text-cyan-400 transition ml-2 font-medium">+84 906 809 404</a>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-cyan-400 w-6 text-xl">📧</span>
+                                <a id="contact-email-link" href="mailto:anhtuan.nguyen@tiktok.com" class="hover:text-cyan-400 transition ml-2 font-medium">anhtuan.nguyen@tiktok.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <p class="text-lg font-semibold text-white">Bạn có thể nhấp vào tab <span class="text-cyan-400">Khách Hàng Mới</span> để tính toán tín dụng quảng cáo tiềm năng của mình trước khi liên hệ!</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contactBtn = document.querySelector('.contact-btn');
+            const allNavItems = Array.from(navLinks).concat([contactBtn]);
+            const contentSections = document.querySelectorAll('.content-section');
+
+            // --- Contact Personalization Logic ---
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const defaultContact = {
+                name: 'Tuan Nguyen',
+                title: 'Partnership Manager, Global Business Solutions | SEA',
+                mobile: '+84 906 809 404',
+                email: 'anhtuan.nguyen@tiktok.com'
+            };
+
+            const contactData = {
+                name: urlParams.get('name') || defaultContact.name,
+                title: urlParams.get('title') || defaultContact.title,
+                mobile: urlParams.get('mobile') || defaultContact.mobile,
+                email: urlParams.get('email') || defaultContact.email,
+            };
+
+            // Update Contact Section with URL parameters
+            document.getElementById('contact-name').textContent = contactData.name;
+            document.getElementById('contact-title').textContent = contactData.title;
+            
+            const mobileLink = document.getElementById('contact-mobile-link');
+            mobileLink.href = 'tel:' + contactData.mobile.replace(/\s/g, '');
+            mobileLink.textContent = contactData.mobile;
+            
+            const emailLink = document.getElementById('contact-email-link');
+            emailLink.href = 'mailto:' + contactData.email;
+            emailLink.textContent = contactData.email;
+
+
+            // --- Navigation & Tab Logic ---
+            allNavItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const target = item.dataset.target;
+
+                    // Xóa trạng thái active khỏi tất cả các nút
+                    allNavItems.forEach(navItem => navItem.classList.remove('active'));
+                    
+                    // Thêm trạng thái active cho nút được click
+                    if (item.classList.contains('nav-link')) {
+                        item.classList.add('active');
+                    } else if (item.classList.contains('contact-btn')) {
+                         item.classList.add('active');
+                    }
+                    
+                    // Hiển thị section tương ứng
+                    contentSections.forEach(section => {
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Gán active ban đầu cho Tổng Quan
+             const initialActive = document.querySelector('[data-target="overview"]');
+             if (initialActive) {
+                initialActive.classList.add('active');
+             }
+
+            // --- Chart Logic ---
+            const netNewData = {
+                labels: ['> $3,500', '> $10,000', '> $15,000'],
+                    datasets: [
+                    {
+                        label: 'Tín dụng cơ sở (%)',
+                        data: [30, 35, 40],
+                        backgroundColor: 'rgba(34, 211, 238, 0.5)', /* Cyan-400 */
+                        borderColor: 'rgba(34, 211, 238, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Bonus Live Ads (%)',
+                        data: [20, 20, 20],
+                        backgroundColor: 'rgba(236, 72, 153, 0.5)', /* Fuchsia-500 */
+                        borderColor: 'rgba(236, 72, 153, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            const netNewConfig = {
+                type: 'bar',
+                data: netNewData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Các bậc ưu đãi cho Khách hàng mới (Net New)',
+                            color: '#e5e7eb'
+                        },
+                        legend: {
+                            labels: {
+                                color: '#a1a1aa'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: {
+                                color: '#a1a1aa'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                },
+                                color: '#a1a1aa'
+                            },
+                            grid: {
+                                color: '#374151'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Tỷ lệ tín dụng (%)',
+                                color: '#a1a1aa'
+                            }
+                        }
+                    }
+                }
+            };
+            
+            const netNewChartCanvas = document.getElementById('netNewChart');
+            if (netNewChartCanvas) {
+                new Chart(netNewChartCanvas, netNewConfig);
+            }
+
+            // --- Calculator Logic ---
+            const calculateBtn = document.getElementById('calculateCreditBtn');
+            const totalSpendInput = document.getElementById('totalSpend');
+            const liveSpendInput = document.getElementById('liveSpend');
+            const resultDiv = document.getElementById('creditResult');
+
+            calculateBtn.addEventListener('click', () => {
+                const totalSpend = parseFloat(totalSpendInput.value) || 0;
+                const liveSpend = parseFloat(liveSpendInput.value) || 0;
+
+                if (totalSpend <= 0) {
+                    resultDiv.textContent = 'Vui lòng nhập tổng chi tiêu.';
+                    resultDiv.className = 'mt-4 text-lg font-bold text-fuchsia-400';
+                    return;
+                }
+
+                let basePercent = 0;
+                if (totalSpend >= 15000) {
+                    basePercent = 0.40;
+                } else if (totalSpend >= 10000) {
+                    basePercent = 0.35;
+                } else if (totalSpend >= 3500) {
+                    basePercent = 0.30;
+                }
+
+                let bonusPercent = 0;
+                if (totalSpend > 0 && (liveSpend / totalSpend) > 0.10) {
+                    bonusPercent = 0.20;
+                }
+
+                const totalPercent = basePercent + bonusPercent;
+                let creditAmount = totalSpend * totalPercent;
+                
+                const incentiveCap = 50000;
+                creditAmount = Math.min(creditAmount, incentiveCap);
+
+                resultDiv.innerHTML = `
+                    Tín dụng cơ sở: ${basePercent * 100}%<br>
+                    Bonus Live Ads: ${bonusPercent * 100}%<br>
+                    Tổng tín dụng ước tính: <span class="text-2xl">${creditAmount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>
+                    (Tối đa $50,000)
+                `;
+                resultDiv.className = 'mt-4 space-y-1 font-bold text-fuchsia-400';
+            });
+        });
+    </script>
+</body>
+</html>
